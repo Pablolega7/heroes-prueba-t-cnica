@@ -1,6 +1,10 @@
 # HeroesApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.4.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.0.
+
+## Live Demo
+
+Navigate to `https://heroes-app-test-82d0b.web.app`.
 
 ## Development server
 

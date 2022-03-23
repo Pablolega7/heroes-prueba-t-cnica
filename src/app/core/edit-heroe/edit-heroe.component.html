@@ -30,7 +30,7 @@
                     <mat-form-field class="ancho">
                         <mat-label>Publisher</mat-label>
                         <mat-select name="publisher" [(ngModel)]="publisher">
-                          <mat-option *ngFor="let item of publisher" [value]="publisher">
+                          <mat-option *ngFor="let item of publisherOpt" [value]="item">
                             {{item}}
                           </mat-option>
                         </mat-select>

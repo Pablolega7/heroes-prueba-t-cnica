@@ -13,11 +13,15 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Batman" #input autocomplete="of">
       </mat-form-field>
 
-      <ng-container *ngIf= "loading$ |async">
-        <mat-spinner></mat-spinner>
+      <ng-container *ngIf= "(loading$ |async)">
+    
+        <div class="centerCustom">
+
+          <mat-spinner></mat-spinner>
+        </div>
       </ng-container>
       
-      <ng-container>
+      <ng-container  >
         
         <div class="mat-elevation-z8">
           <table mat-table [dataSource]="dataSource" matSort >

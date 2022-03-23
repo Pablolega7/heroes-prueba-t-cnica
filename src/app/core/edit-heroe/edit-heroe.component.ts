@@ -20,7 +20,7 @@ import { HeroesModel, Heroes } from '../../models/heroes.models';
 })
 export class EditHeroeComponent implements OnInit, OnDestroy {
 
-  publisher: any[] = [ 'DC','Marvel' ];
+  publisherOpt: any[] = [ 'DC','Marvel' ];
   id               = this.route.snapshot.paramMap.get( 'id' );
 
   private hero$    : Observable<HeroesModel> = this.store.select( selectHero );
@@ -28,7 +28,7 @@ export class EditHeroeComponent implements OnInit, OnDestroy {
 
   public characters : string;
   public power      : string;
-  public pub        : string;
+  public publisher  : string;
   public superhero  : string;
   public favorite   : boolean;
 
@@ -41,7 +41,7 @@ export class EditHeroeComponent implements OnInit, OnDestroy {
         let { characters, favorite, power, publisher, superhero } = hero;
         this.characters = characters;
         this.favorite   = favorite;
-        this.pub        = publisher;
+        this.publisher  = publisher;
         this.power      = power;
         this.superhero  = superhero;
       };
@@ -59,7 +59,7 @@ export class EditHeroeComponent implements OnInit, OnDestroy {
       confirmButtonText : 'Save'
     }).then(( result ) => {
       if ( result.isConfirmed ) { 
-        this.store.dispatch( setHeroData({ hero: new Heroes( this.superhero, this.characters, this.id, this.power, this.pub, this.favorite )}) );
+        this.store.dispatch( setHeroData({ hero: new Heroes( this.superhero, this.characters, this.id, this.power, this.publisher, this.favorite )}) );
       } else if ( result.isDenied ) {
         Swal.fire( 'Changes are not saved', '', 'info');
       }

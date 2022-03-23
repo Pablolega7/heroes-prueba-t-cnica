@@ -7,6 +7,7 @@ import { Heroes } from '../../models/heroes.models';
 import { Store } from '@ngrx/store';
 import { MainState } from '../../main.reducer';
 import { setHeroData } from '../../store/heroesState/heroes.actions';
+//SWEETALERT2//
 import Swal from 'sweetalert2';
 
 @Component({
