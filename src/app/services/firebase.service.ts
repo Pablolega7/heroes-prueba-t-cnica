@@ -1,9 +1,12 @@
-
+//ANGULAR//
 import { Injectable } from '@angular/core';
+//FIREBASE//
 import { collection, doc, Firestore, getFirestore, setDoc } from '@angular/fire/firestore';
+import { deleteDoc, getDoc, getDocs, query } from 'firebase/firestore';
+//NGRX//
 import { Store } from '@ngrx/store';
-import { deleteDoc, getDocs, query } from 'firebase/firestore';
 import { MainState } from '../main.reducer';
+//MODELOS//
 import { HeroesModel, Heroes } from '../models/heroes.models';
 
 @Injectable({
@@ -11,36 +14,34 @@ import { HeroesModel, Heroes } from '../models/heroes.models';
 })
 export class FirebaseService {
 
-  constructor( public db    : Firestore,
-               private store: Store<MainState> ) { }
+  constructor( public db : Firestore, private store: Store<MainState> ) { }
 
   //FUNCION DE FIREBASE PARA SETEAR LOS HEROES//
-  setHeroes( heroes: HeroesModel ){
+  setHeroes = async ( heroes: HeroesModel ) =>{
     const newHeroes = doc( getFirestore(), 'heroes', heroes.id );
     return setDoc( newHeroes, { ...heroes }, { merge: true });
-  };
+  }
 
   //FUNCION DE FIREBASE PARA TRAER LOS HEROES//
-  async getAllHeroes( ){
+  getAllHeroes = async () => {
     const heroesCollection = collection(getFirestore(), "heroes");
     const q = query( heroesCollection );
     let documents: HeroesModel[] = [];
     const queryCollection = await getDocs(q);
      queryCollection.forEach( doc => {
-        let  {
-          superHero, characters, id, power, publisher, favorite } = doc.data();
-          documents.push(new Heroes( superHero, characters, id, power, publisher, favorite ));
+        let  { superhero, characters, id, power, publisher, favorite } = doc.data();
+          documents.push(new Heroes( superhero, characters, id, power, publisher, favorite ));
       });
     return documents;
-  };
+  }
 
   //FUNCION DE FIREBASE PARA ELIMINAR HEROES//
-  async deleteHeroe( heroe: HeroesModel ){
-    await deleteDoc( doc( getFirestore(), "heroes", heroe.id ));
-  };
+  deleteHeroe = async ( id:string ) =>  await deleteDoc( doc( getFirestore(), "heroes", id ));
 
-  //FUNCION PARA FILTAR LOS HEROES DE FIREBASE//
-  setMultipleHeroes( heroes: HeroesModel[], id: string ){
-    heroes.forEach(( heroe ) => this.setHeroes({...heroe, superHero: id}));
+  //FUNCION DE FIREBASE PARA UN HEROE POR ID//
+  getHeroData =  async ( uid: string ): Promise<HeroesModel> => {
+    const docSnap = await getDoc(doc(getFirestore(), "heroes", uid));
+    let  { superhero, characters, id, power, publisher, favorite } = docSnap.data();
+    return docSnap.exists() ? new Heroes( superhero, characters, id, power, publisher, favorite ) : null;
   };
 };

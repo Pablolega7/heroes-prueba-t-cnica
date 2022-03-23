@@ -1,24 +1,25 @@
+//ANGULAR//
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+//NGRX//
 import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { getAllHeroes, getAllHeroesSuccess, getAllHeroesError, deleteHeroe, deleteHeroeSuccess, deleteHeroeError, getHero, getHeroSuccess, getHeroError, setHeroData, setHeroDataSuccess, setHeroDataError } from './heroes.actions';
+//RXJS//
 import { from, of } from "rxjs";
 import { catchError, map, switchMap, take } from "rxjs/operators";
+//FIREBASE//
 import { FirebaseService } from "src/app/services/firebase.service";
-import { getAllHeroes, getAllHeroesSuccess, getAllHeroesError, setAllHeroesData, setAllHeroesDataSuccess, setAllHeroesDataError, deleteHeroe, deleteHeroeSuccess, deleteHeroeError, goHome } from './heroes.actions';
-
 
 
 @Injectable()
 
 export class HerosEffects {
 
-    constructor( private actions$       : Actions, 
-                 private firebaseService: FirebaseService,
-                 private router         : Router ){};
+    constructor( private actions$: Actions, private firebaseService: FirebaseService, private router: Router ){};
 
     getHeroes$ = createEffect( () =>
     this.actions$.pipe(
-      ofType( getAllHeroes ),
+      ofType( getAllHeroes, deleteHeroeSuccess, setHeroDataSuccess ),
       switchMap( () =>  from( this.firebaseService.getAllHeroes()).pipe(
        take( 1 ),
        map( heroes  => getAllHeroesSuccess({ heroes }) ),
@@ -28,36 +29,40 @@ export class HerosEffects {
     ),
  );
 
+ getHero$ = createEffect( () =>
+ this.actions$.pipe(
+   ofType( getHero ),
+   switchMap( ({ id }) =>  from( this.firebaseService.getHeroData( id )).pipe(
+    take( 1 ),
+    map( hero => getHeroSuccess({ hero }) ),
+     catchError( error => of( getHeroError({ error }))),
+   ),
+  ),
+ ),
+);
+
      setHeroeData$ = createEffect( () =>
      this.actions$.pipe(
-      ofType( setAllHeroesData ),
-      switchMap( ({ heroe }) =>  from(this.firebaseService.setHeroes( heroe )).pipe(
+      ofType( setHeroData ),
+      switchMap( ({ hero }) => from(this.firebaseService.setHeroes( hero )).pipe(
        take(1),
-       map( () => setAllHeroesDataSuccess() ),
-        catchError(error => of( setAllHeroesDataError({ error })))
+       map( () => { 
+        this.router.navigate([ '/dashboard' ])
+        return setHeroDataSuccess() }),
+        catchError( error => { return of( setHeroDataError({ error }))}),
       ),
     ),
   ),
  );
 
-     goHome$ = createEffect( () =>
-     this.actions$.pipe(
-      ofType( setAllHeroesDataSuccess, setAllHeroesDataError ),
-      map(() => { 
-       this.router.navigate(['/home']);
-       return goHome();
-      }
-     ),
-    ),
-  );
 
   deleteHeroe$ = createEffect( () =>
      this.actions$.pipe(
       ofType( deleteHeroe ),
-      switchMap( ({ heroe }) =>  from( this.firebaseService.deleteHeroe( heroe )).pipe(
-       take(1),
+      switchMap( ({ id }) =>  from( this.firebaseService.deleteHeroe( id )).pipe(
+       take( 1 ),
        map( () => deleteHeroeSuccess() ),
-        catchError(error => of( deleteHeroeError({ error })))
+        catchError(error => of( deleteHeroeError({ error }))),
       ),
     ),
   ),

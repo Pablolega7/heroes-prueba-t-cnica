@@ -2,18 +2,17 @@ import { HeroesModel } from "src/app/models/heroes.models";
 
 
 export interface HeroesState {
-
-    heroeTemp : HeroesModel | null,
     loading  : boolean,
     error    : any,
-    heroes    : HeroesModel[],
+    heroes   : HeroesModel[],
+    heroEdit : HeroesModel
     search   : string | null
 };
 
 export const initialState: HeroesState = {
-    heroeTemp : null,
     loading   : false,
     heroes     : [],
+    heroEdit : null,
     error     : null,
     search    : null
 };

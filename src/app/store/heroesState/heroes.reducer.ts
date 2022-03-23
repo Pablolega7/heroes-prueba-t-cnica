@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { initialState, HeroesState } from './heroes.state';
-import { addHeroeTemp, deleteHeroeTemp, getAllHeroes, getAllHeroesSuccess, getAllHeroesError, setAllHeroesData, setAllHeroesDataSuccess, setAllHeroesDataError, deleteHeroe, deleteHeroeSuccess, deleteHeroeError, searchFilterHeroe } from './heroes.actions';
+import { getAllHeroes, getAllHeroesSuccess, getAllHeroesError, deleteHeroe, deleteHeroeSuccess, deleteHeroeError, getHero, getHeroSuccess, getHeroError, setHeroData, setHeroDataSuccess, setHeroDataError, loading } from './heroes.actions';
 
 
 
@@ -8,16 +8,7 @@ import { addHeroeTemp, deleteHeroeTemp, getAllHeroes, getAllHeroesSuccess, getAl
 export const HeroesStateReducer = createReducer(
     initialState,
 
-    //Heroe TEMP//
-    on( addHeroeTemp, ( state: HeroesState, { heroe } ) => ({
-        ...state,
-        heroeTemp: heroe
-    })),
-    on( deleteHeroeTemp, ( state: HeroesState ) => ({
-        ...state,
-        heroeTemp: null
-    })),
-
+ 
     //GET HEROES//
     on( getAllHeroes, ( state: HeroesState ) => ({
         ...state,
@@ -36,34 +27,49 @@ export const HeroesStateReducer = createReducer(
         error
     })),
 
-    //SET HEROES DATA//
-    on( setAllHeroesData, ( state: HeroesState, { heroe } ) => ({
+    //GET HERO//
+    on( getHero, ( state: HeroesState, {id} ) => ({
+        ...state,
+        loading: true
+    })),
+
+    on( getHeroSuccess, ( state: HeroesState, { hero } ) => ({
+        ...state,
+        loading: false,
+        heroEdit: hero
+    })),
+
+    on( getHeroError, ( state: HeroesState, { error } ) => ({
+        ...state,
+        loading: false,
+        error
+    })),
+
+    //SET HEROE DATA//
+    on( setHeroData, ( state: HeroesState, { hero } ) => ({
         ...state,
         loading: true,
     })),
 
-    on( setAllHeroesDataSuccess, ( state: HeroesState  ) => ({
+    on( setHeroDataSuccess, ( state: HeroesState  ) => ({
         ...state,
         loading: false,
-        heroeTemp: null
     })),
 
-    on( setAllHeroesDataError, ( state: HeroesState, { error } ) => ({
+    on( setHeroDataError, ( state: HeroesState, { error } ) => ({
         ...state,
         loading: false,
         error
     })),
 
     //DELETE HEROE//
-    on( deleteHeroe, ( state: HeroesState, { heroe } ) => ({
+    on( deleteHeroe, ( state: HeroesState, { id } ) => ({
         ...state,
         loading: true,
-        heroeTemp: heroe
     })),
     on( deleteHeroeSuccess, ( state: HeroesState ) => ({
         ...state,
         loading: false,
-        heroeTemp: null
     })),
 
     on( deleteHeroeError, ( state: HeroesState, { error } ) => ({
@@ -72,9 +78,8 @@ export const HeroesStateReducer = createReducer(
         error
     })),
 
-    //SEARCH FILTER HEROE//
-    on( searchFilterHeroe, ( state: HeroesState, { filter } ) => ({
+    on( loading, ( state: HeroesState ) => ({
         ...state,
-        search : filter
+        loading: true
     })),
 );

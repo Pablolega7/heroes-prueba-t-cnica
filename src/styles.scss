@@ -1,7 +1,14 @@
 
 
-@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-@import "../node_modules/animate.css/animate.css";
-
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.me{
+    margin-right: 10px !important;
+}
+
+.centerCustom{
+    max-width: 450px !important;
+    margin: auto !important;
+}

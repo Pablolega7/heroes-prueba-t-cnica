@@ -1,26 +1,36 @@
-import { Component, NgModule } from '@angular/core';
+//ANGULAR//
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './core/home/home.component';
-import { NewheroeComponent } from './core/newheroe/newheroe.component';
-import { NavbarHeroesComponent } from './shared/navbar-heroes/navbar-heroes.component';
+//COMPONENTES//
+import { TableComponent } from './core/table/table.component';
+import { EditHeroeComponent } from './core/edit-heroe/edit-heroe.component';
+
 
 const routes: Routes = [
   {
-    path     : 'home',
-    component: HomeComponent
+    path         : 'dashboard',
+    component    : TableComponent
   },
   {
-    path     : 'newHeroe',
-    component: NewheroeComponent
+    path         : 'newhero',
+    loadChildren : () => import( './core/new-hero/new-hero.module' ).then( m => m.NewHeroModule )
   },
   {
-    path      : '**',
-    redirectTo: 'home'
+    path         : 'edithero/:id',
+    component    : EditHeroeComponent
+  },
+  {
+    path         : '**',
+    redirectTo   : 'dashboard'
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot( routes )
+  ],
+  exports: [
+    RouterModule
+  ]
 })
 export class AppRoutingModule { }

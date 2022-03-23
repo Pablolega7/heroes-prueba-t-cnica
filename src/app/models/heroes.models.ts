@@ -2,7 +2,7 @@
 
 export interface HeroesModel {
 
-    superHero  : string,
+    superhero  : string,
     characters : string,
     id         : string,
     power      : string,
@@ -12,6 +12,6 @@ export interface HeroesModel {
 
 export class Heroes implements HeroesModel {
 
-    constructor( public superHero: string, public characters: string, public id: string, public power: string, public publisher: string, public favorite: boolean )
+    constructor( public superhero: string, public characters: string, public id: string, public power: string, public publisher: string, public favorite: boolean )
     {}
 };
